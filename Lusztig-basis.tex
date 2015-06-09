@@ -1,0 +1,370 @@
+\documentclass[11pt]{amsart}
+
+\usepackage{manfnt}
+
+\usepackage[colorlinks=true, pdfstartview=FitV, linkcolor=blue, citecolor=blue, urlcolor=blue]{hyperref}
+
+\usepackage{tikz}
+\usepackage[margin=1in]{geometry}
+\usepackage[all]{xy}
+\usepackage{color}
+\usepackage{paralist, mathrsfs}
+\usepackage{hyperref}
+\newcommand{\arxiv}[1]{\href{http://arxiv.org/abs/#1}{\tt arXiv:\nolinkurl{#1}}}
+
+\newcommand\bsm{\begin{smallmatrix}}
+\newcommand\esm{\end{smallmatrix}}
+
+\numberwithin{equation}{section}
+
+\newcommand{\pcom}[1]{\textcolor{blue}{#1}}
+\newcommand{\scom}[1]{\textcolor{red}{#1}}
+
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Proposition}[Theorem]{Proposition} 
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Open}[Theorem]{Open Question}
+\newtheorem{Corollary}[Theorem]{Corollary}
+\newtheorem{Conjecture}[Theorem]{Conjecture}
+\newtheorem{Specialthm}{Theorem}
+\newtheorem{Statement}[Theorem]{Statement}
+\newtheorem{Definition}[Theorem]{Definition}
+\theoremstyle{definition}
+
+\newtheorem{Question}{Question}
+\newtheorem{Comment}[Theorem]{Comment}
+
+\newcommand{\N}{{\Bbb N}}
+\newcommand{\C}{{\Bbb C}}
+\newcommand{\Q}{{\Bbb Q}}
+\newcommand{\Z}{{\Bbb Z}}
+\newcommand{\R}{{\Bbb R}}
+
+\newcommand{\g}{\mathfrak{g}}
+\DeclareMathOperator{\End}{End}
+\newcommand{\Hs}{\mathrm{H}}
+\newcommand{\eps}{\varepsilon}
+\renewcommand{\phi}{\varphi}
+\DeclareMathOperator{\wt}{wt}
+\DeclareMathOperator{\Rep}{Rep}
+\DeclareMathOperator{\ad}{ad}
+\newcommand{\DS}{\displaystyle}
+\renewcommand{\tilde}{\widetilde}
+\renewcommand{\sl}{\mathfrak{sl}}
+\newcommand{\LL}{\mathcal{L}}
+\DeclareMathOperator{\image}{image}
+\newcommand{\sT}{\mathscr{T}}
+\newcommand{\sR}{\mathscr{R}}
+\newcommand{\sC}{\mathscr{C}}
+\newcommand{\qtr}{\mathrm{qtr}}
+
+\newcommand{\GL}{\mathbf{GL}}
+\newcommand{\M}{\mathfrak{M}}
+\newcommand{\cP}{\mathcal{P}}
+\newcommand{\Irr}{\operatorname{Irr}}
+\newcommand{\Grass}{\operatorname{Grass}}
+\newcommand{\Flag}{\operatorname{Flag}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\ol}{\overline}
+\newcommand{\fL}{\mathfrak{L}}
+\newcommand{\cO}{\mathcal{O}}
+\newcommand{\cG}{\mathcal{G}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\bG}{\mathbb{G}}
+\renewcommand{\hom}{\operatorname{Hom}}
+\newcommand{\IC}{\mathrm{IC}}
+\newcommand{\fn}{\mathfrak{n}}
+\newcommand{\fh}{\mathfrak{h}}
+
+\newcommand{\comment}[1]{\textcolor{red}{$[\star$#1 $]$}}
+
+
+\renewcommand{\theenumi}{\roman{enumi}}
+\renewcommand{\labelenumi}{(\theenumi)}
+
+\title{Elementary construction of Lusztig's canonical bases \\ (in finite type)}
+
+\author{Peter Tingley}
+
+
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+We present an elementary and fairly self-contained construction of Lusztig's canonical basis in finite type. The method, which is essentially Lusztig's original approach, is to use the braid group to reduce to rank two calculations. We are able to see some of the wonderful properties of the basis, most notably that it descends to a basis for every highest weight integrable representation, and that it is a crystal basis. Other properties, such as positivity, are not visible without more sophisticated machinery. 
+
+These are notes from a talk given at Loyola University Chicago on Feb 19, 2014. They are not entirely complete; for instance, all the rank two calculations are left to the reader, and we only present the ADE case, although the construction works in all finite types. 
+\end{abstract}
+
+\tableofcontents
+
+\section{Introduction}
+Fix a complex simple Lie algebra $\g$, and let $U^-_q(\g)$ be the lower triangular part of the corresponding quantized universal enveloping algebra. Lusztig's canonical basis $B$ is a basis for $U_q^-(\g)$, unique once the Chevalley generators are fixed, which has remarkable properties. Perhaps the three most important are:
+\begin{enumerate}
+\item \label{property:basis} The image of $B$ in $V_\lambda = U^-_q(\g)/I_\lambda$ is a basis for each irreducible representation $V_\lambda$; equivalently, the intersection of $B$ with every ideal $I_\lambda$ is a basis for the ideal. 
+
+\item \label{property:crystal} $B$ is a crystal basis in the sense of Kashiwara.
+
+\item \label{property:positive} In symmetric type, the structure coefficients of $B$ with respect to multiplication are positive Laurent polynomials in $q$. 
+\end{enumerate}
+Much has been made of \eqref{property:positive}, and it has helped give birth to a whole new field of math: categorification. While this is a wonderful fact, the association of canonical bases with categorification has, I believe, obscured the fact that Lusztig's original construction is quite elementary. Using only properties of the braid group action on $U_q(\g)$ (which can be explicitly checked) and rank 2 calculations, one can establish the existence and uniqueness of a canonical basis, and show that this basis satisfies both \eqref{property:basis} and \eqref{property:crystal}. 
+
+These notes present Lusztig's elementary construction, and explain why it has the desired properties. They are fairly self contained in the sense that we explain how all the steps reduce to elementary calculations, although we do not actually include most of those calculations. The results can all be found in Lusztig's papers \cite{L90a,L90b,L90c} and his book \cite[Chapters 41 and 42]{L:1993}, and extensions to the non-simply laced cases can be found in Saito's work \cite{Sai}. Conventions have been chosen to match \cite{Sai}. We restrict to the ADE case for simplicity; the main difficulty in other types is that one must introduce more notation, and that the rank two calculations are considerably more difficult.
+
+Lusztig's canonical basis is the same as Kashiwara's global crystal basis, and Kashiwara's construction is elementary, at least in the sense that it does not use categorification. However, Kashiwara's construction is quite different from that presented here, and, I would argue, more difficult. It is based on a very complicated induction known as the ``grand loop argument." 
+Of course, Kashiwara's construction has a big advantage in that it works beyond finite type.
+
+\section{Notation}
+
+Let $\g$ be a complex simple Lie algebra of type ADE, $U_q^-(\g)$ be is its quantized universal enveloping algebra, and $E_i, F_i, K_i^{\pm 1}$ for $i \in I$ be the standard generators. Here $I$ indexes the nodes of the corresponding Dynkin diagram, so we can discuss nodes being adjacent or not. Conventions are chosen so that
+$$K_i E_i K_i^{-1} = q^2 E_i \quad \text{ and } E_i F_i - F_i E_i = \frac{K_i-K_i^{-1}}{q-q^{-1}}.$$
+The bar involution on $U_q(\g)$ is the ${\bf Q}$ algebra involution defined by
+$$\bar E_i=E_i, \quad \bar F_i=F_i, \quad \bar K_i= K_i^{-1}, \quad \bar q= q^{-1}.$$
+Checking that this extends to an algebra involution is straightforward. 
+
+\section{The braid group action}
+
+As explained by Lusztig, there is a family of algebra automorphisms $T_i$ of $U_q(\g)$, one for each $i \in I$, given by
+$$
+T_i(F_j) =
+\begin{cases}
+F_j  \quad i \text{ not adjacent to } j \\
+F_j F_i - q F_i F_j \quad i \text{ adjacent to } j \\
+-K_j^{-1} E_j \quad i=j.  
+\end{cases}
+$$
+$$
+T_i(E_j) =
+\begin{cases}
+E_j  \quad i \text{ not adjacent to } j \\
+E_j E_i - q^{-1} E_i E_j \quad i \text{ adjacent to } j \\
+-F_j K_j \quad i=j.  
+\end{cases}
+$$
+$$
+T_i(K_j) =
+\begin{cases}
+K_j  \quad i \text{ not adjacent to } j \\
+K_i K_j  \quad i \text{ adjacent to } j \\
+K_j^{-1} \quad i=j.  
+\end{cases}
+$$
+One can check that this is well-defined by checking that it respects all the defining relations of $U_q(\g)$. One then checks that it satisfies the braid relations 
+(i.e. $T_i T_j T_i = T_j T_i T_j$ for i and j adjacent, and $T_i T_j=T_jT_i$ otherwise) by just checking the action on all generators. 
+Furthermore, each operator $T_i$ performs the Weyl group reflections $s_i$ on the weight of an element, where $U_q(\g)$ is graded by $\wt(E_i)=-\wt(F_i)= \alpha_i$, $\wt(K_i)=0$. 
+
+\section{PBW basis}
+We will define one basis for $U_q^-(\g)$ for each reduced expression $w_0 = s_{i_1} \cdots s_{i_N}$ for the longest element of the Weyl group. For notational purposes, let ${\bf i}$ denote the sequence $i_1, i_2, \ldots, i_N$ corresponding to a reduced expression. Define ``root vectors"
+$$
+\begin{aligned} 
+F_{{\bf i} : \beta_1} & = F_{i_1} \\
+F_{{\bf i} : \beta_2} & = T_{i_1}F_{i_2}  \\
+F_{{\bf i} :  \beta_3} & = T_{i_1}T_{i_2} F_{i_3}  \ldots \;\;\;.\\
+\end{aligned}
+$$
+Let $B_{\bf i} = \{ F_{{\bf i} :  \beta_1}^{(a_1)} F_{{\bf i} :  \beta_2}^{(a_2)} \cdots F_{{\bf i} :  \beta_N}^{(a_N)} : (a_1, \ldots, a_N \in {\Bbb Z_{\geq 0}}^N \}.$
+When the reduced expression is clear, we leave off the subscript ${\bf i}$. The notation $\beta_k$ in the subscripts is because the weight of each root vector is a negative root, and each negative root appears as the weight of exactly one; we like to think of the root vectors as indexed by the corresponding positive roots.
+
+\begin{Lemma} \label{lem:bp} Fix a reduced expression ${\bf i}$. 
+\begin{enumerate}
+
+\item \label{bp1} If $i_k, k_{k+1}$ are not adjacent, then reversing there order gives another reduced expression, and the corresponding root vectors are unchanged. 
+
+\item \label{bp2}  If $i_k=i_{k+2}$ and is adjacent to $i_{k+1}$, then $\beta_k+\beta_{k+2}=\beta_{k+1}$, and $$F_{\beta_{k+1}}=  F_{\beta_{k+2}} F_{\beta_k} - q F_{\beta_k} F_{\beta_{k+2}}.$$ Furthermore, for the new reduced expression ${\bf i'}$ were $i_k i_{k+1} i_k$ is replaced with $i_{k+1} i_k i_{k+1}$, the only root vector that changes is $F_{\beta_{k+1}}$.
+
+\item \label{bp3} For any reduced expression and any simple root $\alpha_i$, $F_{\alpha_i}=F_i$.
+\end{enumerate}
+Here when we say the root vectors are unchanged, we mean $F_{{\bf i}, \beta}=F_{{\bf i'} \beta}$; the order in which these appear does change. 
+\end{Lemma}
+
+\begin{proof}
+Part \eqref{bp1} and \eqref{bp2} follow by applying $T_{i_{k-1}}^{-1} \cdots T_{i_1}^{-1}$ and then doing a rank two calculation. Part \eqref{bp3} is an immediate consequence of \eqref{bp2}, since $\alpha_i$ is not the sum of any two positive roots. 
+\end{proof}
+
+\begin{Lemma}
+$B_{\bf i}$ is a basis for $U_q^-(\g)$.
+\end{Lemma}
+
+\begin{proof}
+The dimension of each weight space is given by Kostant's partition function, so the size of the proposed basis is correct, and hence it suffices to show that these elements are linearly independent. Proceed by induction on $k$, showing that the set of such elements where $a_j=0$ for $j>k$ is linearly independent. The key is that 
+$$T_{i_1}^{-1} F^{\bf a}= (- K_i^{-1} E_i^{-1})^{(a_1)} \otimes F_{\bf i'}^{\bf a'} \in  U_q^{\leq 0} (\g) \otimes U_q^-(\g),$$
+where ${\bf i'}= (i_2, i_3, \cdots, i_N, i_1)$ and ${\bf a'}= (a_2, a_3, \ldots, a_k, 0, \ldots, 0)$. 
+\end{proof}
+
+We denote the basis element corresponding to exponents ${\bf a}= (a_1, \ldots a_N)$ by $F^{\bf a}_{\bf i}$, and call ${\bf a}$ its Lusztig data.
+Of course there are many choices of root vectors $F_\beta$ that lead to bases in this way, but it turns out this is a nice choice. In particular, it has a convexity property:
+
+\begin{Lemma} Fix ${\bf i}$ and $ 1 \leq j < k \leq N$. 
+Write $F_{\beta_k} F_{\beta_j} = \sum_{\bf a} p_{\bf a} F^{\bf a}_{\bf i}$. If $p_{\bf a}\neq 0$ then the only factors that appear with non-zero exponent in $F^{\bf a}$ are $F_{\beta_i}$ for $j \leq i \leq k$.
+\end{Lemma}
+
+\begin{proof}
+Notice that
+$$T_{i_{j-1}}^{-1} \cdots T_{i_2}^{-1} T_{i_1}^{-1} (F_{\beta_k} F_{\beta_j}) \in U_q^-(\g)$$
+and
+$$T_{i_{k}}^{-1} \cdots T_{i_2}^{-1} T_{i_1}^{-1} (F_{\beta_k} F_{\beta_j}) \in U_q^{\geq 0}(\g).$$
+This just uses the fact that the braid group operators are algebra automorphisms. A linear combination of PBW basis elements can only satisfy these conditions if in all of them the exponents of $F_\beta$ are $0$ unless $j \leq i \leq k$. 
+\end{proof}
+%
+%This is essentially an algebraic manifestation of the following geometric conventity property: For any $k$,
+%$$\text{span}_{{\Bbb R}_{\geq 0}} \{ \beta_1, \ldots, \beta_k \} \bigcap \text{span}_{{\Bbb R}_{\geq 0}} \{ \beta_{k+1}, \ldots, \beta_N \} = \{ 0 \}.$$
+
+\section{Integrality, equality mod $q$ and piecewise linear functions.}
+
+The following is key. The first part of the statement (i.e. that the $\mathcal{L}$ lattices agree) can be found in \cite[Proposition 41.1.4]{L:1993}. The second part (i.e. that the various bases agree mod $\mathcal{L}$) is part of  \cite[Proposition 42. 1.5]{L:1993}, although there it is only stated in the simply laced case.  For extensions to non-simply laced types see \cite{Sai}.
+
+\begin{Theorem} \label{th51}
+For any two reduced expressions ${\bf i}, {\bf i'}$, the lattices spanned by $B_{\bf i}$ and $B_{\bf i'}$ over ${\Bbb Z}[q]$ are identical. Call this lattice $\mathcal{L}$. The images of $B_{\bf i}$ and $B_{\bf i'}$ in $\mathcal{L}/q \mathcal{L}$ are identical. 
+\end{Theorem}
+
+\begin{proof}
+One can relate any two reduced expressions by a sequence of braid moves, so it suffices to show that the ${\Bbb Z}[q]$ span does not change when you do a single braid move. The case of a braid move $T_iT_j=T_jT_i$ where $i$ and $j$ are not adjacent is trivial. For the other case, lets say the braid move starts with $i_k=i, i_{k+1}=j, i_{k+1}=i$. It suffices to check that
+\begin{equation} \label{eq:bms}
+\text{span}_{{\Bbb Z}[q]} \{ F_{{\bf i}: {\beta_k}}^{(a_k)} F_{{\bf i}: {\beta_{k+1}}}^{(a_{k+1})} F_{{\bf i}: {\beta_{k+2}}}^{(a_{k+2})} \}= 
+\text{span}_{{\Bbb Z}[q]} \{ F_{{\bf i'}: {\beta_k}}^{(a_k)} F_{{\bf i'}: {\beta_{k+1}}}^{(a_{k+1})} F_{{\bf i'}: {\beta_{k+2}}}^{(a_{k+2})} \}.
+\end{equation}
+Applying $T_{i_1}^{-1} \cdots T_{i_{k-1}}^{-1}$ shows that \eqref{eq:bms} is equivalent to the statement of the theorem in the $\mathfrak{sl}_3$ case. That is an explicit calculation, which we leave to the reader.
+\end{proof}
+
+\section{Triangularity of bar involution and existence of the canonical basis}
+
+There are two natural lexicographical orders on Lusztig data: one where ${\bf a} < {\bf b}$ if $a_1 > b_1$ or $a_1=b_1$ and $(0, a_2, \ldots) < (0, b_2, \ldots)$, and the other where one starts by comparing $a_N$ and $b_N$.  
+We consider the partial order on Lusztig data where ${\bf a} < {\bf b}$ if ${\bf a}$ is less then ${\bf b}$ for both of these orders. 
+
+\begin{Theorem} \label{thm:ut}
+For every reduced expression ${\bf i}$ and every Lustig data ${\bf a}$, 
+$$\bar F_{\bf i}^{\bf a} = F_{\bf i}^{\bf a} + \sum_{{\bf a'}< {\bf a}} p^{\bf a'}_{{\bf a}}(q) F_{\bf i}^{{\bf a'}},$$
+where the $p^{\bf a'}_{{\bf a}}(q)$ are Laurent polynomials in $q$. 
+\end{Theorem}
+
+\begin{proof}
+That the coefficients are Laurent polynomials follows from the form of bar and the braid group operators. The point is the unit triangularity. This is a well known fact, but the following proof is a little non-standard. 
+
+Proceed by induction using the above partial order. If the claim is true for all $F^{(a_j)}_{\beta_j}$, then, for any ${\bf a}$, $\bar F^{\bf a}_{\bf i}$ would be equal to $F_{\bf i}^{\bf a}$ plus terms obtained by replacing some of the $F_{{\bf i}:\beta}$ with lex-lesser monomials. The convexity properties of the root vectors imply that, once this is rearranged, all terms that appear are still lex-less then $F_{\bf i}^{\bf a}$. Hence the minimal counter-example has to be of the form $F_{\beta_j}^{(a_j)}$. 
+
+By Lemma \ref{lem:bp} $F_{\alpha_i}= F_i$, so certainly $F_{\alpha_i}^{(a)}$ satisfies the condition (it is in fact bar-invariant). Hence we may assume that $\beta_j$ is not a simple root. 
+Certainly 
+\begin{equation} \label{eq:bfbj}
+\bar F_{\beta_j}^{(a_j)} = p(q) F_{\beta_j}^{(a_j)} + \sum_{{\bf a'}< {\bf a}} p^{\bf a'}_{{\bf a}}(q) F^{{\bf a'}},
+\end{equation}
+since $F_{\beta_j}^{(a_j)}$ is the unique maximal element of its weight. %Also, since bar is an involution we must have $p(q) \bar p(q)=1$, so $p(q) = \pm q^n$ for some $n$. 
+It remains to see that $p(q)$ is in fact 1. 
+
+Start doing braid moves, changing the partial order until $F_{\beta_j}$ is no longer a root vector (this must happen if the order changes so that some $\alpha_i$ with $\langle \beta, \alpha_i \rangle=1$ moves past $\beta$, so since $\beta_j$ is not simple it is possible). 
+For the braid moves where $\beta$ is not in the middle, $F_{\beta_j}$ does not change, and terms $< (a_j)$ get sent to linear combinations of terms that are still $<(a_j)$, so $p(q)$ in \eqref{eq:bfbj} does not change. Thus we can assume we are in a situation where we can apply a single braid move with $\beta_j$ in the middle. 
+But by Lemma \ref{lem:bp} we have
+$F_{\beta_j}= F_{\beta''} F_{\beta'} - q F_{\beta'} F_{\beta ''}$ 
+where $\beta' \succ \beta \succ \beta''$ are adjacent roots the convex order before the move, so
+$$
+\begin{aligned}
+F_{\beta_j}^{(a_j)} & = (F_{\beta''} F_{\beta'})^{(a_j)}  \quad \text{up to terms which are  $< F_{\beta_j}$ } 
+\end{aligned}
+$$
+in the order after the move. 
+By induction $ (F_{\beta''} F_{\beta'})^{(a_j)}$ is bar invariant up to terms that involve $F_\gamma$ for $\gamma \neq \beta, \beta',\beta''$, and hence, using the triangularity properties, are $< F_{\beta}$, even after being rearranged.
+Well, this forces $p(q) =1$. 
+\end{proof}
+
+A slight variation of the proof of the following can be found in \cite[Lemma 0.27]{DDPW}.
+
+\begin{Theorem} \label{th:cbe}
+There is a unique ${\Bbb Z}[q^{\pm 1}]$basis $B$ of $U_q^-(\g)$ such that
+\begin{enumerate}
+
+\item $B$ is contained in $\mathcal{L}$, $B+q\mathcal{L}$ is a basis for $\mathcal{L}/q\mathcal{L}$, and this agrees with $B^{\bf i} + q\mathcal{L}$ for some (equivalently any by Theorem \ref{th51}) ${\bf i}$. 
+
+\item $B$ is bar invariant. 
+\end{enumerate}
+\end{Theorem}
+
+\begin{proof}
+%Uniqueness here is clear, since if there were two such bases they would be related by an algebraic change of basis matrix which was well-defined all values of $q$ in the Riemann sphere (the ones other than 0 and infinity because we work in ${\Bbb Z}[q^{\pm1}]$, $0$ because setting $q=0$ is the same as modding out by $q \mathcal{L}$, and $\infty$ by bar-invariance), and which is the identity at $q=0$, and that forces it to be the identity. 
+%
+%For existance, 
+Proceed by induction on the partial order $<$, proving that there is such a basis for 
+$V= \text{span} \{F^{\bf a'} \}_{{\bf a'}< {\bf a}} $.  The base case when ${\bf a}$ is minimal holds since $V$ is one dimensional and Theorem \ref{thm:ut} shows that $F^{\bf a}$ is bar-invariant. 
+
+So, fix a non-minimal ${\bf a}$. By Theorem \ref{thm:ut},
+$$\bar F^{\bf a}= F^{\bf a} + \sum_{{\bf a'} < {\bf a}} p_{\bf a'}^{\bf a}(q)  b^{\bf a'}$$
+for various Laurent polynomials $p_{\bf a'}^{\bf a}(q)$,
+where the $b^{\bf a'}$ are the inductively found canonical basis elements.
+But $\bar{\bar F}^{\bf a}=F^{\bf a}$, which easily implies that
+each of these Laurent polynomials is of the form 
+$$p_{\bf a'}^{\bf a}(q)  = q {f}_{\bf a'}^{\bf a}(q)- q^{-1} f_{\bf a'}^{\bf a}(q^{-1}),$$
+where $f_{\bf a'}^{\bf a}(q) $ is a polynomial. 
+Set 
+\begin{equation} \label{eq:ba} 
+b^{\bf a} = F^{\bf a} + \sum_{{\bf a'} < {\bf a}} q f_{\bf a'}^{\bf a}(q)  b^{\bf a'}.
+\end{equation}
+Certainly replacing $F^{\bf a}$ with $b^{\bf a}$ does not change $\mathcal{L}$ and $b^{\bf a}= F^{\bf a}$ mod $q \mathcal{L}$. Then
+$$\bar b^{\bf a} =  F^{\bf a} + \sum_{{\bf a'} <{\bf a}} (q {f}_{\bf a'}^{\bf a}(q)- q^{-1} f_{\bf a'}^{\bf a}(q^{-1})) b^{\bf a'} + \sum_{{\bf a'} < {\bf a}} q^{-1} f_{\bf a'}^{\bf a}(q^{-1})  b^{\bf a'}
+= F^{\bf a} + \sum_{{\bf a'} < {\bf a}} q f_{\bf a'}^{\bf a}(q)  b^{\bf a'} = b^{\bf a},$$
+so we have found the desired element.
+
+Uniqueness is clear, since as the induction proceeds there is never any possibility of choice. 
+\end{proof}
+
+Certainly Lusztig's canonical basis satisfies all the conditions of Theorem \ref{th:cbe} (see e.g. \cite[Theorem 3. 2]{L90b}, so agrees with the basis $B$ here (and in fact, our construction here is very similar to the one in \cite{L90b}, so this is in no way surprising).
+
+\section{Properties of the canonical basis that we can see}
+
+We now discuss those properties of canonical bases which are readily visible from this elementary approach. In fact, we can see most of the important properties, the only real exception being that we cannot see any positivity. However, that should not be surprising: the structure constants of Lusztig's canonical basis are in fact not in general positive outside of type ADE, and the arguments here do work in all finite types. Hence we should not expect to be able to see properties that are particular to the ADE cases. 
+
+\subsection{Descent to modules}
+
+\begin{Theorem}
+Fix a dominant integral weight $\lambda$, and write $V_\lambda= U^-_q(\g)/I_\lambda$. Then $B \cap I_\lambda$ is a ${\Bbb Z}(q)$- basis for $I_\lambda$. Equivalently, $\{ b+I_\lambda : b \not\in I_\lambda \}$ is a basis for $V_\lambda$.  
+\end{Theorem}
+
+\begin{proof}
+
+Write $\lambda$ as a sum of fundamental weights, $\lambda = \sum c_i \omega_i$.
+It is well known that 
+\begin{equation} \label{eq:BGG}
+I_\lambda = \sum_{i \in I} U^-_q(\g) F_i^{c_i}.
+\end{equation}
+So, it suffices to show that
+$B \cap U^-_q(\g) F_i^{c_i}$ spans $U^-_q(\g) F_i^{c_i}$. 
+
+Choose a reduced expression ${\bf i}$ such that $i_N=i$. It is clear that $B^{\bf i} \cap U^-_q(\g) F_i^{c_i}$ spans $U^-_q(\g) F_i^{c_i}$, since 
+$B^{\bf i} \cap U^-_q(\g) = \{ F_{\beta_1}^{(a_1)} \cdots F_{\beta_{N-1}}^{(a_{N-1})} F_i^{(a_i)} : a_i >c_i \}.$
+
+The change of basis from $B^{\bf i}$ to $B$ is upper triangular, so the canonical basis elements corresponding to elements in $B^{\bf i} \cap U^-_q(\g) $
+are all in $\text{span} \{B^{\bf i} \cap U^-_q(\g) \}= U^-_q(\g) F_i^{c_i}$.
+\end{proof}
+
+
+
+
+
+\subsection{Crystal}
+To see that $B$ is a crystal basis, it suffices to show that the Kashiwara operators $\tilde F_i$ all preserve $\mathcal{L}$, and act as partial permutations on the basis $B + q \mathcal{L}$ of $\mathcal{L}/q\mathcal{L}$. The point is, this is clear for $B^{\bf i}$ as long as $i_1=i$, and since all the $B^{\bf i}$ agree mod $q$, that is enough. We leave it to the reader to fill in the details (such as recalling the definitions of the Kashiwara operators) in the case $i_1=i$. 
+
+
+\section{Rank 2} \label{sec:sl3}
+
+Exercise to reader!
+
+\begin{thebibliography}{99}
+
+\bibitem[DDPW08]{DDPW} Deng, Bangming; Du, Jie; Parshall, Brian; Wang, Jianpan. {\it Finite dimensional algebras and quantum groups.} Mathematical Surveys and Monographs, 150. American Mathematical Society, Providence, RI, 2008.
+
+\bibitem[L93]{L:1993}
+Lusztig, George. {\it Introduction to quantum groups.} Volume 110 of Progress in Mathematics. Birkha\"user Boston
+Inc., Boston, MA, 1993.
+
+\bibitem[L90a]{L90a} Lusztig, George. Quantum groups at roots of 1. {\it Geom. Dedicata} {\bf 35} (1990), no. 1-3, 89--113. 
+
+\bibitem[L90b]{L90b} Lusztig, George. Canonical bases arising from quantized enveloping algebras. {\it J. Amer. Math. Soc.} {\bf 3} (1990), no. 2, 447--498. 
+
+\bibitem[L90c]{L90c} Lusztig, George. Finite-dimensional Hopf algebras arising from quantized universal enveloping algebra. {\it J. Amer. Math. Soc.} {\bf 3} (1990), no. 1, 257--296.
+
+\bibitem[S94]{Sai} Saito, Yoshihisa. PBW basis of quantized universal enveloping algebras. {|it Publ. Res. Inst. Math. Sci.} {\bf 30} (1994), no. 2, 209--232
+
+
+
+\end{thebibliography}
+
+\end{document}
